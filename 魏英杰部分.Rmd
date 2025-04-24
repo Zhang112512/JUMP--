@@ -1,0 +1,306 @@
+# 基础三角函数
+
+### 1. 正弦函数（sin）
+### 代码演示
+```{r sin-demo, fig.cap="正弦函数曲线", fig.height=4}
+x <- seq(-2*pi, 2*pi, length=200)
+plot(x, sin(x), type = "l", col = "blue", 
+     main = expression(sin(x)),
+     xlab = "x (弧度)", ylab = "y")
+grid()
+cat("sin(π/6) =", sin(pi/6), "\n")
+cat("sin(π/2) =", sin(pi/2))
+```
+### 2. 余弦函数（cos）
+### 代码演示
+```{r cos-demo  }
+plot(x, cos(x), type = "l", col = "red",
+     main = expression(cos(x)),
+     xlab = "x (弧度)", ylab = "y")
+grid()
+cat("cos(0) =", cos(0), "\n")
+cat("cos(π/3) =", cos(pi/3))
+```
+### 3. 正切函数（tan）
+### 代码演示
+```{r tan-demo  }
+x_tan <- seq(-pi/2 + 0.1, pi/2 - 0.1, length=200)  # 排除奇点
+plot(x_tan, tan(x_tan), type = "l", col = "darkgreen",
+     main = expression(tan(x)),
+     xlab = "x (弧度)", ylab = "y")
+grid()
+cat("tan(π/4) =", tan(pi/4), "\n")
+cat("tan(π/3) =", tan(pi/3))
+```
+### 4. 反三角函数（asin）
+### 代码演示
+```{r asin-demo  }
+x_asin <- seq(-1, 1, length=200)
+plot(x_asin, asin(x_asin), type = "l", col = "purple",
+     main = expression(arcsin(x)),
+     xlab = "x", ylab = "y (弧度)")
+grid()
+cat("asin(0.5) =", asin(0.5), "\n")
+cat("asin(1) =", asin(1))
+```
+### 5. 反三角函数（acos）
+### 代码演示
+```{r acos-demo  }
+plot(x_asin, acos(x_asin), type = "l", col = "orange",
+     main = expression(arccos(x)),
+     xlab = "x", ylab = "y (弧度)")
+grid()
+cat("acos(0) =", acos(0), "\n")
+cat("acos(-1) =", acos(-1))
+```
+### 6. 反正切函数（atan）
+### 代码演示
+```{r atan-demo  }
+x_atan <- seq(-10, 10, length=200)
+plot(x_atan, atan(x_atan), type = "l", col = "brown",
+     main = expression(arctan(x)),
+     xlab = "x", ylab = "y (弧度)")
+grid()
+cat("atan(1) =", atan(1), "\n")
+cat("atan(1000) ≈ π/2 =", atan(1000))
+```
+### 7. 双曲正弦（sinh）
+### 代码演示
+```{r sinh-demo  }
+x_hyper <- seq(-3, 3, length=200)
+plot(x_hyper, sinh(x_hyper), type = "l", col = "darkblue",
+     main = expression(sinh(x)),
+     xlab = "x", ylab = "y")
+grid()
+cat("sinh(0) =", sinh(0), "\n")
+cat("sinh(1) =", sinh(1))
+```
+### 8. 双曲余弦（cosh）
+### 代码演示
+```{r cosh-demo  }
+plot(x_hyper, cosh(x_hyper), type = "l", col = "pink",
+     main = expression(cosh(x)),
+     xlab = "x", ylab = "y")
+grid()
+cat("cosh(0) =", cosh(0), "\n")
+cat("cosh(1) =", cosh(1))
+```
+### 9. 双曲正切（tanh）
+### 代码演示
+```{r tanh-demo  }
+plot(x_hyper, tanh(x_hyper), type = "l", col = "darkcyan",
+     main = expression(tanh(x)),
+     xlab = "x", ylab = "y")
+grid()
+cat("tanh(0) =", tanh(0), "\n")
+cat("tanh(2) =", tanh(2))
+```
+
+# 矩阵运算函数演示
+
+## 1. crossprod - 交叉乘积
+```{r crossprod}
+# 创建矩阵
+set.seed(123)
+A <- matrix(1:6, nrow = 2)
+B <- matrix(rnorm(6), nrow = 2)
+
+# 计算交叉乘积
+result <- crossprod(A, B)  # 等价于 t(A) %*% B
+print("矩阵A:")
+print(A)
+print("矩阵B:")
+print(B)
+print("交叉乘积结果:")
+print(result)
+```
+##2. diag - 对角线操作
+```{r diag}
+# 创建4x4矩阵
+m <- matrix(1:16, nrow = 4)
+
+# 提取/设置对角线
+diag_elements <- diag(m)        # 提取对角线
+diag_matrix <- diag(c(1,2,3))   # 创建对角矩阵
+diag(m) <- 0                   # 对角线归零
+
+print("原始矩阵:")
+print(matrix(1:16, nrow = 4))
+print("提取的对角线:")
+print(diag_elements)
+print("创建的对角矩阵:")
+print(diag_matrix)
+print("对角线归零后的矩阵:")
+print(m)
+```
+##3. solve - 矩阵求逆/解方程
+```{r solve}
+# 创建可逆矩阵
+set.seed(123)
+mat <- matrix(c(4, 3, 3, 2), nrow = 2)
+
+# 求逆矩阵
+inv_mat <- solve(mat)
+
+# 解线性方程组
+b <- c(1, 2)
+solution <- solve(mat, b)
+
+print("原始矩阵:")
+print(mat)
+print("逆矩阵:")
+print(inv_mat)
+print("方程组解:")
+print(solution)
+```
+##4. chol - Cholesky分解
+```{r chol}
+# 创建对称正定矩阵
+cov_mat <- matrix(c(4, 2, 2, 3), nrow = 2)
+
+# Cholesky分解
+chol_decomp <- chol(cov_mat)
+
+print("协方差矩阵:")
+print(cov_mat)
+print("Cholesky分解结果:")
+print(chol_decomp)
+print("验证分解正确性:")
+print(t(chol_decomp) %*% chol_decomp)
+```
+##5. eigen - 矩阵谱分解
+```{r eigen}
+# 对称矩阵特征分解
+mat <- matrix(c(2, 1, 1, 2), nrow = 2)
+eig <- eigen(mat)
+
+print("原始矩阵:")
+print(mat)
+print("特征值:")
+print(eig$values)
+print("特征向量:")
+print(eig$vectors)
+```
+##6. qr - QR分解
+```{r qr}
+# 创建3x2矩阵
+A <- matrix(c(1,2,3,4,5,6), nrow = 3)
+
+# QR分解
+qr_decomp <- qr(A)
+Q <- qr.Q(qr_decomp)
+R <- qr.R(qr_decomp)
+
+print("原始矩阵:")
+print(A)
+print("正交矩阵Q:")
+print(Q)
+print("上三角矩阵R:")
+print(R)
+print("验证QR=A:")
+print(Q %*% R)
+```
+##7. svd - 奇异值分解
+```{r svd}
+# 创建4x2矩阵
+set.seed(123)
+X <- matrix(rnorm(8), nrow = 4)
+
+# 奇异值分解
+svd_decomp <- svd(X)
+
+print("原始矩阵:")
+print(X)
+print("奇异值:")
+print(svd_decomp$d)
+print("左奇异向量U:")
+print(svd_decomp$u)
+print("右奇异向量V:")
+print(svd_decomp$v)
+```
+
+# 数学函数
+
+## 1. Bessel函数
+```{r bessel}
+# 第一类修正贝塞尔函数
+x <- seq(0, 5, length=100)
+y_I <- besselI(x, nu = 1)  # 阶数ν=1
+y_K <- besselK(x, nu = 1)  # 第二类修正贝塞尔函数
+
+plot(x, y_I, type = "l", col = "red", 
+     main = "Bessel函数示例", xlab = "x", ylab = "y")
+lines(x, y_K, col = "blue")
+legend("topright", legend = c("I_1(x)", "K_1(x)"),
+       col = c("red", "blue"), lty = 1)
+```
+## 2. choose - 组合数
+```{r choose}
+# 计算组合数
+cat("5选2:", choose(5, 2), "\n")
+cat("10选5:", choose(10, 5), "\n")
+cat("组合数性质验证:", choose(7, 3) == factorial(7)/(factorial(3)*factorial(4)))
+```
+## 3. factorial - 阶乘
+```{r factorial}
+# 阶乘与双阶乘
+cat("5! =", factorial(5), "\n")
+cat("10!! =", factorial(10, double = TRUE))  # 双阶乘10*8*6*4*2
+```
+## 4. gamma - Gamma函数
+```{r gamma}
+# Gamma函数性质演示
+cat("Γ(5) =", gamma(5), " (等于4!)\n")
+cat("Γ(0.5) =", gamma(0.5), " (等于√π)\n")
+cat("Γ(1.5) =", gamma(1.5))
+```
+## 5. beta - Beta函数
+```{r beta}
+# Beta函数与Gamma函数关系
+a <- 3; b <- 2
+cat("B(3,2) =", beta(a, b), "\n")
+cat("Γ(3)Γ(2)/Γ(5) =", gamma(a)*gamma(b)/gamma(a+b))
+```
+## 6. norm - 矩阵范数
+```{r norm}
+# 计算矩阵范数
+mat <- matrix(1:9, nrow = 3)
+cat("Frobenius范数:", norm(mat, "F"), "\n")
+cat("最大列和范数:", norm(mat, "O"))
+```
+## 7. rank - 秩
+```{r rank}
+# 处理相同值的秩
+vec <- c(3, 1, 4, 1, 5)
+cat("默认秩:", rank(vec), "\n")
+cat("最小秩:", rank(vec, ties.method = "min"))
+```
+## 8. max/min - 极值
+```{r max/min}
+# 矩阵极值查找
+mat <- matrix(rnorm(12), nrow = 3)
+cat("矩阵最大值:", max(mat), "\n")
+cat("矩阵最小值:", min(mat), "\n")
+cat("按列最大值:", apply(mat, 2, max))
+```
+## 9. cumsum/cumprod - 累积运算
+```{r cumsum/cumprod}
+# 累积运算演示
+vec <- c(2, 3, 1, 4)
+cat("累积和:", cumsum(vec), "\n")
+cat("累积乘积:", cumprod(vec))
+```
+## 10. diff - 差分
+```{r diff}
+# 高阶差分演示
+ts_data <- c(10, 13, 8, 15, 9)
+cat("一阶差分:", diff(ts_data), "\n")
+cat("二阶差分:", diff(ts_data, differences = 2))
+```
+## 11. zapsmall - 数值截断
+```{r zapsmall}
+# 处理浮点误差
+result <- 1e-16 * rnorm(5)
+cat("原始值:", result, "\n")
+cat("处理后:", zapsmall(result))
+```
