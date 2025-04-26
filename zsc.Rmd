@@ -1,0 +1,207 @@
+---
+title: "基础字符串与因子处理（R base中的函数） 字符处理部分"
+output: html_document
+date: "2025-04-25"
+---
+
+## 字符串操作
+
+### abbreviate 缩写字符串
+
+```{r}
+# 将长字符串缩写为最小唯一长度
+long_names <- c("September", "October", "November")
+short_names <- abbreviate(long_names, minlength = 3)
+print(short_names)
+```
+
+### paste 连接字符串
+
+```{r}
+# 使用空格连接字符串
+combined <- paste("R", "Language", "2025", sep = "-")
+print(combined)
+```
+
+### paste0 无分隔符连接字符串
+
+```{r}
+# 直接拼接字符串
+no_space <- paste0("Data", "Science", 2025)
+print(no_space)
+```
+
+### substr 提取/替换固定位置子字符串
+
+```{r}
+# 1. 提取子字符串
+text <- "DataScience2025"
+# 提取第5到第8个字符（包含边界）
+sub_text <- substr(text, 5, 8)
+print(sub_text)  # 输出 "Scie"
+
+# 2. 替换子字符串
+# 将第14到第15个字符替换为"99"
+substr(text, 14, 15) <- "99"
+print(text)  
+```
+
+### substring 灵活提取子字符串
+
+```{r}
+# 1. 默认提取到末尾
+text <- "AdvancedRProgramming"
+# 从第9个字符开始提取到末尾
+sub_text1 <- substring(text, 9)
+print(sub_text1)  # 输出 "Programming"
+
+# 2. 参数循环规则（短参数循环补全）
+# 不同长度的起始/结束位置
+positions <- c(1, 3, 5)
+# 起始位置为1,3,5；结束位置循环补全为5,5,5
+sub_text2 <- substring(text, positions, 5)
+print(sub_text2)  
+```
+
+### strsplit 拆分字符串
+
+```{r}
+# 按逗号拆分字符串
+csv_data <- "apple,banana,orange"
+split_data <- strsplit(csv_data, ",") [[1]] 
+print(split_data)
+```
+
+### strrep 重复字符串元素
+
+```{r}
+# 重复字符串3次
+repeated <- strrep("R-", 3)
+print(repeated)
+```
+
+### strtrim 将字符字符串修剪到指定的显示宽度
+
+```{r}
+# 修剪单个字符串到指定宽度
+long_text <- "This is a very long sentence for demonstration."
+trimmed_text <- strtrim(long_text, width = 15)
+print(trimmed_text)  
+```
+
+### tolower/toupper 大小写转换
+
+```{r}
+# 大小写转换示例
+mixed_case <- c("Hello", "R_User")
+print(tolower(mixed_case))
+print(toupper(mixed_case))
+```
+
+### chartr 字符替换
+
+```{r}
+# 将a替换为A，e替换为E
+original <- "apple banana"
+modified <- chartr("ae", "AE", original)
+print(modified)
+```
+
+## 正则表达式
+
+### grep 模式匹配和替换
+
+```{r}
+# 查找包含字母"o"的单词
+words <- c("dog", "cat", "orange")
+matches <- grep("o", words)
+print(words[matches])
+```
+
+### grepl 逻辑值模式匹配
+
+```{r}
+# 返回逻辑值向量，表示每个元素是否匹配。
+fruits <- c("apple", "banana", "blueberry")
+result <- grepl("berry", fruits)
+print(result)
+```
+
+### gsub 全局替换
+
+```{r}
+# 替换匹配的所有子串。
+sentence <- "I like apples and apples are sweet"
+gsub_result <- gsub("apples", "bananas", sentence)
+print(gsub_result)
+```
+
+### regexec 正则表达式匹配
+
+```{r}
+pattern <- "([a-z]+)([0-9]+)"
+text <- "abc123"
+regexec_result <- regexec(pattern, text)
+matches <- regmatches(text, regexec_result)
+print(matches)
+```
+
+### regmatches 提取或替换正则表达式匹配的子字符串
+
+```{r}
+text <- "abc123"
+pattern <- regexec("([a-z]+)([0-9]+)", text)
+matches <- regmatches(text, pattern)
+print(matches)
+```
+
+### regex R中使用的正则表达式说明
+
+```{r}
+# 说明：R 中正则表达式与其他语言相似，支持 .（任意字符）、*（重复）、+、?、^、$ 等符号。
+emails <- c("user1@example.com", "notemail", "admin@test.org")
+pattern <- "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"
+valid <- grepl(pattern, emails)
+print(valid)
+```
+
+## 字符编码
+
+### Encoding 读取或设置字符编码
+
+```{r}
+# 查看字符串编码
+text <- "你好"
+enc <- Encoding(text)
+print(enc)
+
+# 设置编码
+Encoding(text) <- "UTF-8"
+print(text)
+```
+
+### iconv 在编码之间转换字符向量
+
+```{r}
+x <- "你好"
+# 将编码从 UTF-8 转为 GB2312
+converted <- iconv(x, from = "UTF-8", to = "GB2312", sub = "byte")
+print(converted)
+```
+
+### utf8ToInt 字符转UTF-8编码值
+
+```{r}
+# 获取字符的UTF-8编码值
+utf_string <- "R语言"
+utf_codes <- utf8ToInt(utf_string)
+print(utf_codes)
+```
+
+### validUTF8 检查字符串是否为有效的 UTF-8 编码
+
+```{r}
+# 检查字符串是否有效
+valid <- validUTF8(c("Valid", "无效\x80"))
+print(valid)
+```

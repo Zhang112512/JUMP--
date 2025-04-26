@@ -1,0 +1,509 @@
+---
+title: "朱美乐部分"
+author: "ml"
+date: "2025-04-24"
+output: html_document
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+环境变量与工作目录
+
+**Sys.getenv()**
+
+功能：获取环境变量的值。可用于查询系统或用户自定义的环境变量内容。
+
+```{r}
+# 获取多个环境变量的值
+# 定义要获取的环境变量名称向量
+env_vars <- c("PATH", "USER", "LANG")
+# 获取这些环境变量的值
+env_values <- Sys.getenv(env_vars)
+print(env_values)
+```
+
+**Sys.setenv()**
+
+•功能：设置环境变量的值。可以创建新的环境变量，或者修改已存在环境变量的值。
+
+```{r}
+# 设置单个环境变量
+Sys.setenv(API_KEY = "your_api_key_here")
+# 获取环境变量的值
+api_key <- Sys.getenv("API_KEY")
+print(paste("API Key:", api_key))
+```
+
+**Sys.unsetenv()**
+
+• 功能：删除指定的环境变量。用于移除不再需要的环境变量。
+
+```{r}
+# 设置一个环境变量
+Sys.setenv(MY_VARIABLE = "This is a test value")
+# 查看环境变量的值
+print(Sys.getenv("MY_VARIABLE"))
+# 使用 Sys.unsetenv 删除环境变量
+Sys.unsetenv("MY_VARIABLE")
+# 再次查看环境变量的值
+print(Sys.getenv("MY_VARIABLE")) 
+```
+
+**new.env()**
+
+•
+功能：创建一个新的环境对象。可用于在R中组织和管理相关的数据、函数等对象，实现代码封装、对象共享等功能。
+
+```{r}
+# 创建一个新的空环境
+new_env <- new.env()
+# 向新环境中添加变量
+new_env$var1 <- 100
+new_env$var2 <- "Hello, R Environment!"
+# 查看新环境中的变量
+print(new_env$var1)
+print(new_env$var2)
+```
+
+**assign()**
+
+•
+功能：将一个值分配给环境变量中的名称，可用于在指定环境中创建或更新对象。
+
+```{r}
+# 在全局环境中赋值
+# 使用 assign 函数在全局环境中创建一个名为 'x' 的变量，并赋值为 10
+assign("x", 10)
+# 打印变量 'x' 的值
+print(x)
+```
+
+**get()**
+
+• 功能：用于获取环境变量中的对象。
+
+```{r}
+# 在全局环境中获取变量的值
+# 在全局环境中创建一个变量 'a' 并赋值为 100
+a <- 100
+# 使用 get 函数获取变量 'a' 的值
+value_a <- get("a")
+print(value_a)
+```
+
+**getwd()**
+
+• 功能：获取当前工作目录
+
+```{r}
+# 使用getwd函数获取当前工作目录
+current_directory <- getwd()
+# 打印当前工作目录
+cat("当前工作目录是：", current_directory, "\n") 
+```
+
+**setwd()**
+
+• 功能：设置工作目录
+
+```{r}
+# 使用 setwd 函数设置工作目录
+# 请根据实际情况替换为你想要设置的目录路径
+setwd("C:/Users/zmeil/Desktop/天医")
+
+# 查看当前工作目录
+current_dir <- getwd()
+print(paste("当前工作目录是:", current_dir))    
+```
+
+图形绘制
+
+**plot()**
+
+• 功能：绘制两个变量关系的散点图；绘制折线图
+
+```{r plot, echo=FALSE}
+#示例 1：绘制散点图
+x <- 1:10
+y <- x^2
+plot(x, y, main = "散点图示例", xlab = "x轴", ylab = "y轴", col = "blue", pch = 16)
+
+# 示例 2：绘制直方图
+data <- rnorm(1000)  # 生成1000个正态分布的随机数
+hist(data, main = "直方图示例", xlab = "数值", ylab = "频数", col = "green")
+
+```
+
+**barplot()**
+
+• 功能：绘制柱状图 categories \<- c("A", "B", "C", "D")
+
+```{r}
+# 创建一个向量，代表不同类别的值
+values <- c(10, 20, 15, 25, 30)
+
+# 创建一个向量，代表不同类别的名称
+categories <- c("A", "B", "C", "D", "E")
+
+# 使用 barplot 函数绘制条形图
+barplot(values, names.arg = categories, main = "简单条形图示例",
+        xlab = "类别", ylab = "值", col = "skyblue")
+```
+
+**hist()**
+
+• 功能：绘制直方图
+
+```{r}
+# 生成一组随机数据
+data <- rnorm(100)
+
+# 使用 hist 函数绘制直方图
+hist(data, main = "随机数据的直方图",
+     xlab = "数据值", ylab = "频数",
+     col = "lightgreen", border = "black")
+```
+
+**boxplot()**
+
+• 功能：绘制箱式图
+
+```{r}
+# 生成三组随机数据
+group1 <- rnorm(50, mean = 10, sd = 2)
+group2 <- rnorm(50, mean = 15, sd = 3)
+group3 <- rnorm(50, mean = 20, sd = 2)
+
+# 将数据组合成一个数据框
+data <- data.frame(Group1 = group1, Group2 = group2, Group3 = group3)
+
+# 使用 boxplot 函数绘制箱线图
+boxplot(data, main = "三组随机数据的箱线图",
+        xlab = "分组", ylab = "数值",
+        col = c("skyblue", "lightgreen", "pink"),
+        border = "black")
+```
+
+**pie()**
+
+• 功能：绘制饼图
+
+```{r}
+# 定义不同类别所占的比例
+slices <- c(20, 30, 15, 35)
+
+# 定义每个类别的标签
+labels <- c("类别 A", "类别 B", "类别 C", "类别 D")
+
+# 定义饼图颜色
+colors <- c("red", "green", "blue", "yellow")
+
+# 使用 pie 函数绘制饼图
+pie(slices, labels = labels, main = "不同类别占比饼图", col = colors)
+```
+
+图形参数
+
+**col**
+
+•
+功能：用于设置图形元素的颜色，如点、线、填充等颜色。可以使用颜色名称（如"red"）、十六进制颜色码（如"#FF0000"）或颜色索引。例子同下。
+
+**bg**
+
+• 功能：设置图形的背景颜色。
+
+```{r}
+# 定义不同类别所占的比例
+slices <- c(20, 30, 15, 35)
+
+# 定义每个类别的标签
+labels <- c("类别 A", "类别 B", "类别 C", "类别 D")
+
+# 定义饼图颜色
+# 除了使用预定义颜色名称，还可以使用十六进制颜色码
+colors <- c("#FF0000", "#00FF00", "#0000FF", "#FFFF00")
+
+# 使用 pie 函数绘制饼图，设置图形窗口背景颜色为 lightgray
+par(bg = "lightgray")
+pie(slices, labels = labels, main = "不同类别占比饼图", col = colors)
+
+# 也可以使用颜色的索引来循环使用颜色
+# 这里创建一个包含两种颜色的向量
+limited_colors <- c("orange", "purple")
+# 当饼图部分多于颜色数量时，颜色会循环使用
+pie(slices, labels = labels, main = "使用有限颜色绘制的饼图", col = limited_colors)
+```
+
+**pch**
+
+• 功能：设置点的形状。取值为0 - 25的整数，代表不同形状。如pch =
+16是实心圆，pch = 3是十字。
+
+```{r}
+# 生成一些用于绘制散点图的数据
+x <- 1:10
+y <- rnorm(10)
+
+# 使用 plot 函数绘制散点图，设置不同的 pch 值
+# pch = 1 表示空心圆
+plot(x, y, main = "使用不同 pch 值的散点图", xlab = "x", ylab = "y", pch = 1)
+
+# pch = 2 表示三角形
+plot(x, y, main = "使用不同 pch 值的散点图", xlab = "x", ylab = "y", pch = 2)
+
+# pch = 16 表示实心圆
+plot(x, y, main = "使用不同 pch 值的散点图", xlab = "x", ylab = "y", pch = 16)
+```
+
+**lty**
+
+• 功能：设置线的类型。如lty = 1为实线（默认），lty = 2为虚线，lty =
+3为点线。
+
+```{r}
+# 生成用于绘制折线图的数据
+x_line <- 1:10
+y_line <- rnorm(10)
+
+# 使用 plot 函数绘制折线图，设置不同的 lty 值
+# lty = 1 表示实线
+plot(x_line, y_line, type = "l", main = "使用不同 lty 值的折线图", xlab = "x", ylab = "y", lty = 1)
+
+# lty = 2 表示虚线
+plot(x_line, y_line, type = "l", main = "使用不同 lty 值的折线图", xlab = "x", ylab = "y", lty = 2)
+
+# lty = 3 表示点线
+plot(x_line, y_line, type = "l", main = "使用不同 lty 值的折线图", xlab = "x", ylab = "y", lty = 3)
+```
+
+**lwd**
+
+• 功能：设置线的宽度。数值越大，线越粗，如lwd = 2表示线宽为默认值的2倍
+
+```{r}
+plot(x_line, y_line, type = "l", main = "设置线条宽度及轴标签的折线图", 
+     xlab = "自定义 x 轴标签", ylab = "自定义 y 轴标签", lty = 1, lwd = 3)
+```
+
+**main**
+
+• 功能：设置图形的主标题。示例同上。
+
+**xlab和ylab**
+
+• 功能：分别设置x轴和y轴的标签。示例同上。
+
+**cex**
+
+• 功能：控制文本和符号的大小。 cex = 1为默认大小，cex =
+1.5使文本和符号增大到默认大小的1.5倍。
+
+```{r}
+# 创建一个简单的散点图
+x <- 1:10
+y <- x^2
+
+# 绘制散点图，设置点的大小为默认的1.5倍
+plot(x, y, pch = 16, cex = 1.5, 
+     main = "Scatter Plot with Adjusted Point Size",
+     xlab = "X-axis",
+     ylab = "Y-axis")
+
+# 添加文本标签，设置文本大小为默认的0.8倍
+text(x, y, labels = as.character(y), cex = 0.8)
+```
+
+**xlim和ylim**
+
+• 功能：设置x轴和y轴的范围。例如，plot(1:10, xlim = c(0, 12), ylim =
+c(0, 10))限定了x轴范围是0到12，y轴范围是0到10。
+
+```{r}
+# 生成数据
+x <- 1:10
+y <- x^2
+
+# 绘制散点图，同时设定x轴范围为0到12，y轴范围为0到120
+plot(x, y, 
+     main = "Scatter Plot with Custom Axes Limits",
+     xlab = "X-axis",
+     ylab = "Y-axis",
+     xlim = c(0, 12),
+     ylim = c(0, 120))
+```
+
+**axes**
+
+• 功能：若FALSE，则不绘制坐标轴，可通过axis()函数自定义坐标轴。
+
+```{r}
+# 生成示例数据
+x <- 1:10
+y <- x^2
+
+# 绘制散点图，不绘制默认坐标轴
+plot(x, y, axes = FALSE, 
+     main = "Scatter Plot without Default Axes",
+     xlab = "X-axis",
+     ylab = "Y-axis")
+
+# 手动添加自定义坐标轴
+axis(1)  # 添加 x 轴
+axis(2)  # 添加 y 轴
+
+# 添加边框
+box()
+```
+
+图形输出
+
+**默认设备输出**
+
+使用默认设备输出,图形会默认显示在R的图形窗口中。例如：
+
+```{r}
+# 生成示例数据
+x <- 1:10
+y <- x^2
+
+# 绘制散点图，图形会在默认图形设备（交互式窗口）中显示
+plot(x, y, main = "Scatter Plot", xlab = "X", ylab = "Y")
+```
+
+**保存图形到文件**
+
+可以使用png()、pdf()、jpeg()等函数来指定图形输出的文件格式和文件名，绘制完图形后用dev.off()关闭设备。
+
+**pdf()**
+
+•
+功能：创建PDF格式图形文件，指定文件名和其他参数，绘图完成后用dev.off()关闭设备。
+
+```{r}
+# 生成示例数据
+x <- 1:10
+y <- x^2
+
+# 开启 PDF 文件图形设备
+pdf("scatter_plot.pdf")
+
+# 绘制散点图
+plot(x, y, main = "Scatter Plot", xlab = "X", ylab = "Y")
+
+# 关闭图形设备，此时图形会保存到指定文件
+dev.off()
+```
+
+**PNG()**
+
+• 功能：创建PNG格式文件。
+
+```{r}
+# 生成示例数据
+x <- 1:10
+y <- x^2
+
+# 开启 PNG 文件图形设备
+png("scatter_plot.png")
+
+# 绘制散点图
+plot(x, y, main = "Scatter Plot", xlab = "X", ylab = "Y")
+
+# 关闭图形设备，此时图形会保存到指定文件
+dev.off()
+```
+
+**windows()**
+
+• 功能：用于创建Windows系统下的图形窗口，可设置窗口大小等参数。
+
+```{r}
+# 生成数据
+x <- 1:10
+y <- x^2
+
+# 开启一个新的图形窗口
+windows()
+
+# 在新窗口中绘制散点图
+plot(x, y, main = "Scatter Plot in New Window",
+     xlab = "X-axis", ylab = "Y-axis")
+```
+
+**X11()**
+
+• 功能：X11()函数在Linux系统上创建图形窗口。
+
+**quartz()**
+
+• 功能：uartz()函数用于Mac系统创建图形窗口，提供交互式图形环境。
+
+系统信息
+
+**version**
+
+• 功能：查看R的版本信息，包括版本号、平台等。
+
+```{r}
+# 调用 version 函数获取版本信息
+version_info <- version
+
+# 输出版本信息
+print(version_info)
+```
+
+**Sys.info()**
+
+•功能：获取系统的详细信息，如操作系统类型、节点名称、用户登录名等，以列表形式返回。
+
+```{r}
+# 调用 Sys.info() 函数获取系统信息
+system_info <- Sys.info()
+
+# 输出版本信息
+print(system_info)
+```
+
+**Sys.getenv()**
+
+• 功能：用于获取系统环境变量的值。
+
+```{r}
+# 示例1：获取所有环境变量
+all_env_vars <- Sys.getenv()
+print(all_env_vars)
+
+# 示例2：获取指定环境变量的值
+path_env <- Sys.getenv("PATH")
+print(path_env)
+
+# 示例3：获取不存在的环境变量并设置默认值
+non_existent_env <- Sys.getenv("MY_NON_EXISTENT_VAR", unset = "default_value")
+print(non_existent_env)
+```
+
+**sessionInfo()**
+
+• 功能：提供当前R会话的详细信息，包括R版本、已加载的包及其版本等。
+
+```{r}
+# 调用 sessionInfo() 函数获取当前 R 会话的信息
+session_info <- sessionInfo()
+
+# 输出版本信息
+print(session_info)
+```
+
+**Sys.time()**
+
+• 功能：可以获取当前系统的日期和时间。
+
+```{r}
+# 获取当前系统时间
+current_time <- Sys.time()
+
+# 打印当前系统时间
+print(current_time)
+```

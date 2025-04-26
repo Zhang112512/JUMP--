@@ -1,0 +1,746 @@
+---
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+---install.packages("rmarkdown") library(rmarkdown) title:
+"基础字符串与因子处理（R base中的函数）" author: "Zhang" date:
+"2025-04-22" output: html_document ---
+
+# 基础字符串与因子处理（R base中的函数）
+
+## Rbase的概况及数据分析中的作用
+
+#### R base指的是R语言的核心基础包，它是R语言安装时默认自带的底层核心函数库，无需通过 install.packages()安装或 library() 加载即可直接使用。R Base提供了R语言最基础、最核心的功能，涵盖数据操作、数学计算、统计建模、图形绘制、字符串处理、因子操作等各个方面。几乎所有 R 用户编写的代码都会直接或间接依赖 R Base 中的函数。
+
+## 数据操作
+
+### 数据提取与替换
+
+#### data.frame(x) 提取或替换数据框的部分。
+
+```{r data.frame, echo=FALSE}
+#创建数据框
+students <- data.frame( Name = c("Alice", "Bob", "Charlie"), Age = c(20, 21, 22), Score = c(85, 90, 78) )
+#查看数据框
+print(students)
+```
+
+#### factor(x) 提取或替换因子的部分。
+
+```{r factor, echo=FALSE}
+# 创建一个字符向量
+gender <- c("Male", "Female", "Male", "Female", "Male")
+# 使用factor函数将字符向量转换为因子
+gender_factor <- factor(gender)
+# 查看因子
+print(gender_factor)
+```
+
+#### replace (x)替换向量、列表或数据框中的元素。
+
+```{r replace, echo=FALSE}
+# 创建一个向量
+vec <- c(10, 2, 30, 4, 50)
+# 将向量中索引为2和4的元素替换为100和200
+new_vec <- replace(vec, c(2, 4), c(100, 200))
+print(new_vec)
+```
+
+#### subset(x) 用于筛选数据框或矩阵中的子集，它可以根据指定的条件选取满足要求的行和列。
+
+```{r subset, echo=FALSE}
+# 创建一个示例数据框
+students <- data.frame(
+  name = c("Alice", "Bob", "Charlie", "David", "Eve"),
+  age = c(20, 21, 20, 22, 21),
+  score = c(85, 90, 78, 92, 88),
+  stringsAsFactors = FALSE)
+# 筛选出年龄大于 20 的学生
+subset_age <- subset(students, age > 20)
+print(subset_age)
+```
+
+### 数据转换与处理
+
+#### as.Date(x) 把字符型、数值型等类型的数据转换为日期型。
+
+```{r as.Date, echo=FALSE}
+#将字符型数据转换为默认格式的对应日期，日期格式为 "YYYY-MM-DD"
+mydates <- as.Date(c("2025-04-24","2025-04-29"))
+print(mydates)
+```
+
+#### as.character(x) 将日期值转变为字符型。
+
+```{r as.character, echo=FALSE}
+# 将日期对象转换为字符向量
+date_obj <- as.Date("2025-04-24")
+date2 <- as.character(date_obj)
+print(date2)
+```
+
+#### as.data.frame(x) 强制转换为数据框。
+
+```{r as.data.frame, echo=FALSE}
+# 将向量转换为数据框
+vec <- c(10, 20, 30, 40, 50)
+vec_df <- as.data.frame(vec)
+print(vec_df)
+```
+
+#### as.environment(x) 强制转换为环境对象（用来存储变量名和对应值的一种数据结构，像一个容器）。
+
+```{r as.environment, echo=FALSE}
+#创建一个列表
+my_list <- list(a = 1, b = 2, c = 3)
+# 将列表转换为环境
+my_env <- as.environment(my_list)
+# 查看环境中的变量
+print(my_env$a)
+print(my_env$b)
+print(my_env$c)
+```
+
+#### as.numeric(x) 将对象转换为数值。
+
+```{r as.numeric, echo=FALSE}
+#将字符向量转换为数值向量
+char_vector <- c("1", "2", "3")
+num_vector <- as.numeric(char_vector)
+print(num_vector)
+```
+
+#### as.character(x) 将对象转换为字符。
+
+```{r as.character , echo=FALSE}
+# 将逻辑向量转换为字符向量
+logical_vector <- c(TRUE, FALSE)
+char_from_logical <- as.character(logical_vector)
+print(char_from_logical)
+```
+
+#### scale(x) 对数据进行标准化处理。
+
+```{r scale, echo=FALSE}
+# 创建一个示例数据框
+data <- data.frame(
+  col1 = c(1, 2, 3, 4, 5),
+  col2 = c(10, 20, 30, 40, 50))
+# 对数据框进行标准化处理
+scaled_data <- scale(data)
+# 查看标准化后的数据
+print(scaled_data)
+```
+
+#### transform(x) 对数据框进行转换操作，能够创建新变量、修改现有变量。
+
+```{r transform, echo=FALSE}
+# 创建一个示例数据框
+df <- data.frame(
+  x = 1:5,
+  y = 6:10)
+# 1. 创建新变量
+new_df1 <- transform(df, z = x + y)
+print(new_df1)
+# 2. 修改现有变量
+new_df2 <- transform(df, x = x * 2)
+print(new_df2)
+```
+
+### 数据合并与拆分
+
+#### append(x) 在向量、列表或者其他可追加元素的数据结构中添加元素。
+
+```{r append, echo=FALSE}
+# 示例1: 向向量中追加元素
+# 创建一个向量
+vec <- c(1, 2, 3)
+# 在向量末尾追加元素4
+new_vec <- append(vec, 4)
+print(new_vec)
+
+# 示例2: 在向量指定位置插入元素
+# 在向量vec的第2个位置插入元素5
+inserted_vec <- append(vec, 5, after = 1)
+print(inserted_vec)
+```
+
+#### cbind(x) 按列合并多个向量、矩阵或数据框。
+
+```{r cbind, echo=FALSE}
+# 示例 1: 合并向量
+# 创建两个向量
+vec1 <- c(1, 2, 3)
+vec2 <- c(4, 5, 6)
+# 使用 cbind 按列合并向量
+combined_vec <- cbind(vec1, vec2)
+print(combined_vec)
+
+# 示例 2: 合并矩阵
+# 创建两个矩阵
+mat1 <- matrix(1:4, nrow = 2)
+mat2 <- matrix(5:8, nrow = 2)
+# 使用 cbind 按列合并矩阵
+combined_mat <- cbind(mat1, mat2)
+print(combined_mat)
+
+# 示例 3: 合并数据框
+# 创建两个数据框
+df1 <- data.frame(A = c(1, 2), B = c(3, 4))
+df2 <- data.frame(C = c(5, 6), D = c(7, 8))
+# 使用 cbind 按列合并数据框
+combined_df <- cbind(df1, df2)
+print(combined_df)
+```
+
+#### rbind(x) 按行合并多个向量、矩阵、数据框。
+
+```{r rbind, echo=FALSE}
+# 示例1：合并向量
+vec1 <- c(1, 2, 3)
+vec2 <- c(4, 5, 6)
+result1 <- rbind(vec1, vec2)
+print(result1)
+
+# 示例2：合并数据框
+df1 <- data.frame(Name = c("Alice", "Bob"), Age = c(20, 21))
+df2 <- data.frame(Name = c("Charlie", "David"), Age = c(22, 23))
+result2 <- rbind(df1, df2)
+print(result2)
+
+# 示例3：合并矩阵
+mat1 <- matrix(1:4, nrow = 2)
+mat2 <- matrix(5:8, nrow = 2)
+result3 <- rbind(mat1, mat2)
+print(result3)
+```
+
+#### merge(x) 合并两个数据框。
+
+```{r merge, echo=FALSE}
+# 创建两个示例数据框
+df1 <- data.frame(
+  ID = c(1, 2, 3, 4),
+  Name = c("Alice", "Bob", "Charlie", "David"),
+  stringsAsFactors = FALSE)
+
+df2 <- data.frame(
+  ID = c(2, 3, 4, 5),
+  Score = c(85, 90, 78, 88),
+  stringsAsFactors = FALSE)
+
+# 1. 内连接（默认）
+# 只合并两个数据框中ID列值都存在的行
+merged_inner <- merge(df1, df2, by = "ID")
+print(merged_inner)
+
+# 2. 左连接
+# 保留df1中的所有行，匹配df2中的行，没有匹配的部分用NA填充
+merged_left <- merge(df1, df2, by = "ID", all.x = TRUE)
+print(merged_left)
+
+# 3. 右连接
+# 保留df2中的所有行，匹配df1中的行，没有匹配的部分用NA填充
+merged_right <- merge(df1, df2, by = "ID", all.y = TRUE)
+print(merged_right)
+
+# 4. 全连接
+# 保留两个数据框中的所有行，没有匹配的部分用NA填充
+merged_full <- merge(df1, df2, by = "ID", all = TRUE)
+print(merged_full)
+```
+
+#### split(x) 依据某个因子或因子列表将向量、列表或数据框分割成多个子对象。
+
+```{r split, echo=FALSE}
+# 按因子分割向量
+numbers <- 1:10
+groups <- factor(rep(c("A", "B"), each = 5))
+split_numbers <- split(numbers, groups)
+print(split_numbers)
+```
+
+### 数据筛选和排序：筛选出分数大于80的学生
+
+```{r rbind, echo=FALSE}
+filtered_students <- students[students$Score > 80, ]
+
+# 数据排序：按照分数降序排序
+sorted_students <- students[order(-students$Score), ]
+
+# 输出筛选结果
+print("筛选出分数大于80的学生：")
+print(filtered_students)
+
+# 输出排序结果
+print("按照分数降序排序后的学生：")
+print(sorted_students)
+
+```
+
+### 数据生成与修改的常见代码演示
+
+```{r rbind, echo=FALSE}
+# 2. 添加新的列到数据框中，函数功能：向已有的数据框中增加新的变量列
+students$Gender <- c("Female", "Male", "Male")
+print("添加新列后的的数据框:")
+print(students)
+
+# 3. 修改数据框中的某一个值，函数功能：根据索引位置或条件修改数据框中特定位置的元素值
+students$Score[students$Name == "Alice"] <- 95
+print("修改Alice分数后的数据框:")
+print(students)
+
+# 4. 删除数据框中的某一列，函数功能：从数据框中移除指定的变量列
+students <- students[, -4]  # 删除第4列，即Gender列
+print("删除Gender列后的数据框:")
+print(students)
+
+# 5. 生成一个序列数据，函数功能：创建一个等差或等比数列
+sequence_data <- seq(from = 1, to = 10, by = 1)  # 生成从1到10，步长为1的序列
+print("生成的序列数据:")
+print(sequence_data)
+
+# 6. 生成一个随机数向量，函数功能：按照指定的分布和参数生成随机数
+random_numbers <- rnorm(n = 5, mean = 0, sd = 1)  # 生成5个均值为0，标准差为1的正态分布随机数
+print("生成的随机数向量:")
+print(random_numbers)
+```
+
+### 基础数学运算代码演示
+
+```{r rbind, echo=FALSE}
+# 加法
+sum_result <- 5 + 3
+print(paste("5 + 3 的结果是:", sum_result))
+
+# 减法
+diff_result <- 10 - 4
+print(paste("10 - 4 的结果是:", diff_result))
+
+# 乘法
+prod_result <- 6 * 2
+print(paste("6 * 2 的结果是:", prod_result))
+
+# 除法
+quot_result <- 15 / 3
+print(paste("15 / 3 的结果是:", quot_result))
+
+# 取余
+rem_result <- 11 %% 3
+print(paste("11 除以 3 的余数是:", rem_result))
+
+# 幂运算
+pow_result <- 2 ^ 3
+print(paste("2 的 3 次方是:", pow_result))
+```
+
+### 基础三角函数
+
+#### 1. 正弦函数-sin(x)
+
+```{r sin-demo, echo=FALSE}
+x <- seq(-2*pi, 2*pi, length=200)
+plot(x, sin(x), type = "l", col = "blue", 
+     main = expression(sin(x)),
+     xlab = "x (弧度)", ylab = "y")
+cat("sin(π/6) =", sin(pi/6), "\n")
+cat("sin(π/2) =", sin(pi/2))
+```
+
+#### 2. 余弦函数-cos(x)
+
+```{r cos-demo, echo=FALSE}
+plot(x, cos(x), type = "l", col = "red",
+     main = expression(cos(x)),
+     xlab = "x (弧度)", ylab = "y")
+cat("cos(0) =", cos(0), "\n")
+cat("cos(π/3) =", cos(pi/3))
+```
+
+#### 3. 正切函数-tan(x)
+
+```{r tan-demo, echo=FALSE}
+x_tan <- seq(-pi/2 + 0.1, pi/2 - 0.1, length=200)  # 排除奇点
+plot(x_tan, tan(x_tan), type = "l", col = "darkgreen",
+     main = expression(tan(x)),
+     xlab = "x (弧度)", ylab = "y")
+cat("tan(π/4) =", tan(pi/4), "\n")
+cat("tan(π/3) =", tan(pi/3))
+```
+
+#### 4. 反三角函数-asin(x)
+
+```{r asin-demo, echo=FALSE}
+x_asin <- seq(-1, 1, length=200)
+plot(x_asin, asin(x_asin), type = "l", col = "purple",
+     main = expression(arcsin(x)),
+     xlab = "x", ylab = "y (弧度)")
+cat("asin(0.5) =", asin(0.5), "\n")
+cat("asin(1) =", asin(1))
+```
+
+#### 5. 反三角函数-acos(x)
+
+```{r acos-demo, echo=FALSE}
+plot(x_asin, acos(x_asin), type = "l", col = "orange",
+     main = expression(arccos(x)),
+     xlab = "x", ylab = "y (弧度)")
+cat("acos(0) =", acos(0), "\n")
+cat("acos(-1) =", acos(-1))
+```
+
+#### 6. 反正切函数-atan(x）
+
+```{r atan-demo, echo=FALSE}
+x_atan <- seq(-10, 10, length=200)
+plot(x_atan, atan(x_atan), type = "l", col = "brown",
+     main = expression(arctan(x)),
+     xlab = "x", ylab = "y (弧度)")
+cat("atan(1) =", atan(1), "\n")
+cat("atan(1000) ≈ π/2 =", atan(1000))
+```
+
+#### 7. 双曲正弦-sinh(x)
+
+```{r sinh-demo, echo=FALSE}
+x_hyper <- seq(-3, 3, length=200)
+plot(x_hyper, sinh(x_hyper), type = "l", col = "darkblue",
+     main = expression(sinh(x)),
+     xlab = "x", ylab = "y")
+grid()
+cat("sinh(0) =", sinh(0), "\n")
+cat("sinh(1) =", sinh(1))
+```
+
+#### 8. 双曲余弦-cosh(x)
+
+```{r cosh-demo, echo=FALSE}
+plot(x_hyper, cosh(x_hyper), type = "l", col = "pink",
+     main = expression(cosh(x)),
+     xlab = "x", ylab = "y")
+grid()
+cat("cosh(0) =", cosh(0), "\n")
+cat("cosh(1) =", cosh(1))
+```
+
+#### 9. 双曲正切-tanh(x)
+
+```{r tanh-demo, echo=FALSE}
+plot(x_hyper, tanh(x_hyper), type = "l", col = "darkcyan",
+     main = expression(tanh(x)),
+     xlab = "x", ylab = "y")
+grid()
+cat("tanh(0) =", tanh(0), "\n")
+cat("tanh(2) =", tanh(2))
+```
+
+### 其他数学函数
+
+#### 1.factorial (x)- 阶乘
+
+```{r factorial, echo=FALSE}
+# 阶乘
+cat("5! =", factorial(5), "\n")
+```
+
+#### 2. gamma(x) - Gamma函数
+
+```{r gamma}
+# Gamma函数性质演示
+cat("Γ(5) =", gamma(5), " (等于4!)\n")
+cat("Γ(0.5) =", gamma(0.5), " (等于√π)\n")
+cat("Γ(1.5) =", gamma(1.5))
+```
+
+#### 3. beta (x)- Beta函数
+
+```{r beta}
+# Beta函数与Gamma函数关系
+a <- 3; b <- 2
+cat("B(3,2) =", beta(a, b), "\n")
+cat("Γ(3)Γ(2)/Γ(5) =", gamma(a)*gamma(b)/gamma(a+b))
+```
+
+#### 4. norm(x) - 矩阵范数
+
+```{r norm}
+# 计算矩阵范数
+mat <- matrix(1:9, nrow = 3)
+cat("Frobenius范数:", norm(mat, "F"), "\n")
+cat("最大列和范数:", norm(mat, "O"))
+```
+
+#### 5. rank(x) - 秩
+
+```{r rank}
+# 处理相同值的秩
+vec <- c(3, 1, 4, 1, 5)
+cat("默认秩:", rank(vec), "\n")
+cat("最小秩:", rank(vec, ties.method = "min"))
+```
+
+#### 6. max/min (x)- 极值
+
+```{r max/min}
+# 矩阵极值查找
+mat <- matrix(rnorm(12), nrow = 3)
+cat("矩阵最大值:", max(mat), "\n")
+cat("矩阵最小值:", min(mat), "\n")
+cat("按列最大值:", apply(mat, 2, max))
+```
+
+#### 7. cumsum/cumprod(x) - 累积运算
+
+```{r cumsum/cumprod}
+# 累积运算演示
+vec <- c(2, 3, 1, 4)
+cat("累积和:", cumsum(vec), "\n")
+cat("累积乘积:", cumprod(vec))
+```
+
+#### 8. diff(x) - 差分
+
+```{r diff}
+# 高阶差分演示
+ts_data <- c(10, 13, 8, 15, 9)
+cat("一阶差分:", diff(ts_data), "\n")
+cat("二阶差分:", diff(ts_data, differences = 2))
+```
+
+#### 9. zapsmall(x) - 数值截断
+
+```{r zapsmall}
+# 处理浮点误差
+result <- 1e-16 * rnorm(5)
+cat("原始值:", result, "\n")
+cat("处理后:", zapsmall(result))
+```
+
+### 统计函数
+
+#### 1.mean(x)-平均数
+
+```{r}
+mean(c(1,2,3,4))
+```
+
+#### 2.median(x)-中位数
+
+```{r}
+median(c(1,2,3,4))
+```
+
+#### 3.sd(x)-标准差
+
+```{r}
+sd(c(1,2,3,4))
+```
+
+#### 4.var(x)-方差
+
+```{r}
+var(c(1,2,3,4))
+```
+
+#### 5.range(x)-求值域
+
+```{r}
+x<-c(1,2,3,4)
+range(x)
+```
+
+#### 6.sum(x)-求和
+
+```{r}
+x<-c(1,2,3,4)
+sum(x)
+```
+
+#### 7.quantile(x,probs)-求分位数。其中x为待求分位数的数值型向量，probs为一个由[0,1]之间的概率值组的数值向量
+
+```{r}
+求x的30%和80%分位点
+y<-quantile(x,c(0.3,0.8))
+```
+
+---
+title: "基础字符串与因子处理（R base中的函数） 字符处理部分"
+output: html_document
+date: "2025-04-25"
+---
+
+## 字符串操作
+
+### abbreviate 缩写字符串
+
+```{r}
+# 将长字符串缩写为最小唯一长度
+long_names <- c("September", "October", "November")
+short_names <- abbreviate(long_names, minlength = 3)
+print(short_names)
+```
+
+### paste 连接字符串
+
+```{r}
+# 使用空格连接字符串
+combined <- paste("R", "Language", "2025", sep = "-")
+print(combined)
+```
+
+### paste0 无分隔符连接字符串
+
+```{r}
+# 直接拼接字符串
+no_space <- paste0("Data", "Science", 2025)
+print(no_space)
+```
+
+### substr 提取/替换固定位置子字符串
+
+```{r}
+# 1. 提取子字符串
+text <- "DataScience2025"
+# 提取第5到第8个字符（包含边界）
+sub_text <- substr(text, 5, 8)
+print(sub_text)  # 输出 "Scie"
+
+# 2. 替换子字符串
+# 将第14到第15个字符替换为"99"
+substr(text, 14, 15) <- "99"
+print(text)  
+```
+
+### substring 灵活提取子字符串
+
+```{r}
+# 1. 默认提取到末尾
+text <- "AdvancedRProgramming"
+# 从第9个字符开始提取到末尾
+sub_text1 <- substring(text, 9)
+print(sub_text1)  # 输出 "Programming"
+
+# 2. 参数循环规则（短参数循环补全）
+# 不同长度的起始/结束位置
+positions <- c(1, 3, 5)
+# 起始位置为1,3,5；结束位置循环补全为5,5,5
+sub_text2 <- substring(text, positions, 5)
+print(sub_text2)  
+```
+
+### strsplit 拆分字符串
+
+```{r}
+# 按逗号拆分字符串
+csv_data <- "apple,banana,orange"
+split_data <- strsplit(csv_data, ",") [[1]] 
+print(split_data)
+```
+
+### strrep 重复字符串元素
+
+```{r}
+# 重复字符串3次
+repeated <- strrep("R-", 3)
+print(repeated)
+```
+
+### strtrim 将字符字符串修剪到指定的显示宽度
+
+```{r}
+# 修剪单个字符串到指定宽度
+long_text <- "This is a very long sentence for demonstration."
+trimmed_text <- strtrim(long_text, width = 15)
+print(trimmed_text)  
+```
+
+### tolower/toupper 大小写转换
+
+```{r}
+# 大小写转换示例
+mixed_case <- c("Hello", "R_User")
+print(tolower(mixed_case))
+print(toupper(mixed_case))
+```
+
+### chartr 字符替换
+
+```{r}
+# 将a替换为A，e替换为E
+original <- "apple banana"
+modified <- chartr("ae", "AE", original)
+print(modified)
+```
+
+## 正则表达式
+
+### grep 模式匹配和替换
+
+```{r}
+# 查找包含字母"o"的单词
+words <- c("dog", "cat", "orange")
+matches <- grep("o", words)
+print(words[matches])
+```
+
+### grepl 逻辑值模式匹配
+
+```{r}
+# 返回逻辑值向量，表示每个元素是否匹配。
+fruits <- c("apple", "banana", "blueberry")
+result <- grepl("berry", fruits)
+print(result)
+```
+
+### gsub 全局替换
+
+```{r}
+# 替换匹配的所有子串。
+sentence <- "I like apples and apples are sweet"
+gsub_result <- gsub("apples", "bananas", sentence)
+print(gsub_result)
+```
+
+## 字符编码
+
+### Encoding 读取或设置字符编码
+
+```{r}
+# 查看字符串编码
+text <- "你好"
+enc <- Encoding(text)
+print(enc)
+
+# 设置编码
+Encoding(text) <- "UTF-8"
+print(text)
+```
+
+### iconv 在编码之间转换字符向量
+
+```{r}
+x <- "你好"
+# 将编码从 UTF-8 转为 GB2312
+converted <- iconv(x, from = "UTF-8", to = "GB2312", sub = "byte")
+print(converted)
+```
+
+### utf8ToInt 字符转UTF-8编码值
+
+```{r}
+# 获取字符的UTF-8编码值
+utf_string <- "R语言"
+utf_codes <- utf8ToInt(utf_string)
+print(utf_codes)
+```
+
+### validUTF8 检查字符串是否为有效的 UTF-8 编码
+
+```{r}
+# 检查字符串是否有效
+valid <- validUTF8(c("Valid", "无效\x80"))
+print(valid)
+```
