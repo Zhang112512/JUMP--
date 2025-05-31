@@ -1,0 +1,158 @@
+---
+title: "Descriptive analysis"
+output: html_document
+date: "2025-05-28"
+---
+
+# 描述性统计分析
+
+## **一、描述性统计分析概述**
+
+描述性统计是通过计算统计量、绘制图表等方式，概括性地描述数据的分布特征、集中趋势和离散程度等。在 R 语言中，可通过基础函数或扩展包快速实现数据的描述性分析，为后续推断统计或机器学习奠定基础。
+
+## 二、统计量计算
+
+统计量是描述数据特征的关键指标，包括集中趋势（均值、中位数）、离散程度（方差、标准差）、分布形态（偏度、峰度）等，帮助直观理解数据的基本特征。
+
+```{r}
+# 示例数据
+data <- c(12, 15, 18, 20, 22, 25, 28, 30, 35, 40)
+
+# 1. 集中趋势统计量
+mean(data)         # 均值
+median(data)       # 中位数
+mode(data)         # 众数（需自定义函数，因R无内置函数）
+
+# 2. 离散程度统计量
+var(data)          # 方差
+sd(data)           # 标准差
+range(data)        # 极差
+IQR(data)          # 四分位距
+
+# 3. 分布形态统计量
+install.packages("moments")
+library(moments)   # 加载moments包
+skewness(data)     # 偏度
+kurtosis(data)     # 峰度
+
+# 4. 一次性计算多个统计量
+summary(data)      # 基础统计量汇总
+```
+
+## 三、频数表与频率分布
+
+频数表用于展示数据在不同区间的分布频次，频率分布则进一步计算各区间的比例，常用于分类数据或连续数据的分组分析，帮助观察数据的分布规律。
+
+```{r}
+# 示例数据（连续型）
+test_scores <- c(65, 72, 81, 55, 90, 78, 68, 85, 76, 72, 88, 62)
+
+# 1. 生成频数表（连续数据分组）
+breaks <- seq(50, 100, by=10)  # 定义分组区间
+score_freq <- table(cut(test_scores, breaks=breaks))
+score_freq
+
+# 2. 计算频率
+score_percent <- prop.table(score_freq) * 100
+score_percent
+
+# 3. 可视化：直方图
+hist(test_scores, breaks=breaks, 
+     main="考试成绩分布", 
+     xlab="分数", ylab="频数",
+     col="lightblue", border="white")
+abline(v=mean(test_scores), col="red", lwd=2)  # 添加均值线
+
+# 4. 分类数据频数表（示例：性别数据）
+gender <- c("男", "女", "男", "男", "女", "女", "男", "女")
+gender_freq <- table(gender)
+gender_freq
+
+# 5. 可视化：条形图
+barplot(gender_freq, 
+        main="性别分布", 
+        xlab="性别", ylab="频数",
+        col=c("skyblue", "pink"),
+        las=1)
+```
+
+## 四、相关系数分析及可视化
+
+相关系数用于衡量两个变量之间的线性相关程度，常见包括皮尔逊相关系数（适用于正态分布数据）、斯皮尔曼 / 肯德尔相关系数（适用于非参数数据），结合可视化可直观展示变量间的关联模式。
+
+```{r}
+# 示例数据：模拟两个相关变量
+set.seed(123)  # 保证结果可复现
+x <- 1:20
+y <- 2*x + rnorm(20, mean=0, sd=5)  # y与x呈线性相关
+
+# 1. 皮尔逊相关系数（参数方法，适用于线性关系）
+cor_result <- cor(x, y, method="pearson")
+cor_result
+
+# 2. 相关性显著性检验
+cor.test(x, y, method="pearson")
+
+# 3. 斯皮尔曼秩相关系数（非参数方法，适用于非线性关系）
+cor(x, y, method="spearman")
+
+# 4. 可视化：散点图
+plot(x, y, 
+     main="x与y的散点图", 
+     xlab="x变量", ylab="y变量",
+     pch=16, col="navyblue",
+     cex=1.2)
+abline(lm(y~x), col="red", lwd=2)  # 添加回归直线
+
+# 5. 多变量相关矩阵（示例：mtcars数据集）
+data(mtcars)
+# 提取数值型变量
+numeric_vars <- mtcars[, sapply(mtcars, is.numeric)]
+# 计算相关矩阵
+cor_matrix <- cor(numeric_vars)
+cor_matrix
+
+# 6. 相关矩阵可视化：热图
+install.packages("corrplot")
+library(corrplot)
+corrplot(cor_matrix, 
+         method="color", 
+         type="upper", 
+         tl.col="black", 
+         tl.srt=45,
+         main="变量相关系数热图")
+```
+
+### 3.2 相关性热图
+
+```{r}
+corrplot(cor_matrix, method = "color", type = "upper",
+         tl.col = "black", tl.srt = 45, addCoef.col = "black")
+```
+
+## 四、变量的可视化分析
+
+### 4.1 直方图（Histogram）
+
+```{r}
+ggplot(data, aes(x = mpg)) +
+  geom_histogram(binwidth = 2, fill = "skyblue", color = "black") +
+  labs(title = "MPG的直方图", x = "Miles Per Gallon", y = "频数")
+```
+
+### 4.2 箱线图（Boxplot）
+
+```{r}
+ggplot(data, aes(x = cyl_factor, y = mpg)) +
+  geom_boxplot(fill = "lightgreen") +
+  labs(title = "MPG按气缸数的箱线图", x = "气缸数", y = "Miles Per Gallon")
+```
+
+### 4.3 散点图与拟合线
+
+```{r}
+ggplot(data, aes(x = wt, y = mpg)) +
+  geom_point(color = "blue") +
+  geom_smooth(method = "lm", se = TRUE, color = "red") +
+  labs(title = "重量与MPG的关系", x = "车重", y = "Miles Per Gallon")
+```
